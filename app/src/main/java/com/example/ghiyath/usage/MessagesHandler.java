@@ -25,16 +25,21 @@ public class MessagesHandler extends Activity{
         //Read through SMS to:
             //udpate usage
             //update topRanked
+        /*
+        Uri inboxUri = Uri.parse("content://sms/inbox");
 
-        /*Uri inboxUri = Uri.parse("content://sms/inbox");
         String[] columns = new String[] { "_id", "address", "body" };
+
         ContentResolver cr = getContentResolver();
+
         Cursor c = cr.query(inboxUri, columns, null, null, null);
+
 
         c.moveToFirst();
         while(c.moveToNext()) {
             Log.v("id", c.getString(c.getColumnIndex("_id")));
-        }*/
+
+        } */
 
     }
 

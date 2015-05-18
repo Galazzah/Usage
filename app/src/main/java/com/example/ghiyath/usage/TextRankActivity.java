@@ -17,16 +17,18 @@ public class TextRankActivity extends Activity {
         setContentView(R.layout.activity_text_ranks);
 
         Uri inboxUri = Uri.parse("content://sms/inbox");
+
         String[] columns = new String[] { "_id", "address", "body" };
+
         ContentResolver cr = getContentResolver();
+
         Cursor c = cr.query(inboxUri, columns, null, null, null);
 
-        c.moveToFirst();
-        while(c.moveToNext()) {
-            Log.v("id", c.getString(c.getColumnIndex("_id")));
-        }
 
-        //MessagesHandler smsHandler = new MessagesHandler();
+
+        /*
+        MessagesHandler smsHandler = new MessagesHandler();
+        */
     }
 
 
