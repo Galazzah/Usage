@@ -14,8 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class MainActivity extends Activity implements View.OnClickListener {
+    public HashMap<String, Contact> usageMap = new HashMap<String, Contact>();
+    public ArrayList<Contact> topRanked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
             Uri inboxUri = Uri.parse("content://sms/inbox");
 
             String[] columns = new String[] { "_id", "address", "body" };
@@ -50,12 +56,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
             c.moveToFirst();
-            Log.v("ID", c.getString(c.getColumnIndex("_id")));
-            Log.v("Body",c.getString(c.getColumnIndex("body")));
-            Log.v("address",c.getString(c.getColumnIndex("address")));
-            while(c.moveToNext()) {
-                Log.v("id", c.getString(c.getColumnIndex("_id")));
-        }
+
+            //Test instance of Contact object
+            Contact test = new Contact();
+            //Query Cursor c for phoneNum of test
+            test.setPhoneNum(c.getString(c.getColumnIndex("address")));
+            test.incrementsmsRecieved();
+            //add entry to usageMap hashMap
+            usageMap.put(test.getPhoneNum(), test);
+
+            //entries in the hashMap
+            Log.v("testing hashMap", usageMap.toString());
+            //TODO: Populate hashMap with all items from cursor C and sort by (data)? and display in listView?
+
 
 
     }
