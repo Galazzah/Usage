@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Parcel;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,13 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    public HashMap<String, Contact> usageMap = new HashMap<String, Contact>();
-    public ArrayList<Contact> topRanked;
+    public Map<Double, Contact> usageMap = new HashMap<Double, Contact>();
+    public ArrayList<Contact> topRanked = new ArrayList<Contact>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,18 +33,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Button start = (Button) findViewById(R.id.start);
         start.setOnClickListener(this);
     }
-
-
-        /*
-        start.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-                Intent intent = new Intent(MainActivity.this, TextRankActivity.class);
-                startActivity(intent);
-            }
-
-            */
-
-
 
     @Override
     public void onClick(View v) {
@@ -54,20 +45,36 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             Cursor c = cr.query(inboxUri, columns, null, null, null);
 
+            //populate HashMap usageMap with <double phone(phone nuber), Contact(phone)>
+            while(c.moveToNext()) {
 
-            c.moveToFirst();
+                double phone = Double.parseDouble(c.getString(c.getColumnIndex("address")));
+                if(!usageMap.containsKey(phone))
+                    usageMap.put(phone, new Contact(phone));
 
-            //Test instance of Contact object
-            Contact test = new Contact();
-            //Query Cursor c for phoneNum of test
-            test.setPhoneNum(c.getString(c.getColumnIndex("address")));
-            test.incrementsmsRecieved();
-            //add entry to usageMap hashMap
-            usageMap.put(test.getPhoneNum(), test);
+                Contact updatedContact = usageMap.get(phone);
+                updatedContact.incrementsmsRecieved();
+                usageMap.put(phone, updatedContact);
+            }
 
-            //entries in the hashMap
-            Log.v("testing hashMap", usageMap.toString());
-            //TODO: Populate hashMap with all items from cursor C and sort by (data)? and display in listView?
+            //sort and populate ArrayList topRanked with Contact objects
+            for(double phoneNum : usageMap.keySet()) {
+                int i = 0;
+                for(; i < topRanked.size() && !usageMap.get(phoneNum).compareSMS(topRanked.get(i)); i++) {
+                }
+                topRanked.add(i, usageMap.get(phoneNum));
+            }
+
+            //TODO: send topRanked to new activity for display
+            /*
+            Intent intent = new Intent(MainActivity.this, TextRankActivity.class);
+            Bundle args = new Bundle();
+            args.putSerializable("topRanked", (Serializable) topRanked);
+            intent.putExtra("Bundle", args);
+            //Start TextRankActivity
+            startActivity(intent);
+            */
+
 
 
 

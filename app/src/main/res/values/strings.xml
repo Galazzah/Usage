@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Usage</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">Who do you text the most?</string>
     <string name="action_settings">Settings</string>
-    <string name="start">Enter</string>
+    <string name="start">Let\'s find out</string>
 </resources>

@@ -1,35 +1,26 @@
 package com.example.ghiyath.usage;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 /**
- * Created by z on 5/16/2015.
+ * Created by Ghiyath on 5/19/2015.
  */
 public class TextRankActivity extends Activity {
-
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_text_ranks);
-
-        Uri inboxUri = Uri.parse("content://sms/inbox");
-
-        String[] columns = new String[] { "_id", "address", "body" };
-
-        ContentResolver cr = getContentResolver();
-
-        Cursor c = cr.query(inboxUri, columns, null, null, null);
+    //TODO: rebuild topRanked from Parcel
+    /*
+    Intent intent = getIntent();
+    Bundle args = intent.getBundleExtra("Bundle");
+    ArrayList<Contact> topRanked = (ArrayList<Contact>) args.getSerializable("topRanked");
+    */
 
 
-
-        /*
-        MessagesHandler smsHandler = new MessagesHandler();
-        */
-    }
 
 
 
