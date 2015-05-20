@@ -8,6 +8,7 @@ public class Contact{
     //todo: text analytics
     private String contactID;
     private String name;
+    //change phoneNum to Double
     private double phoneNum;
     private int smsSent;
     private int smsRecieved;
@@ -25,8 +26,9 @@ public class Contact{
     public String getContactID() { return contactID; }
 
     //phoneNum
+    //change phoneNum to Double
     public double getPhoneNum () { return phoneNum; }
-    public void setPhoneNum ( int phoneNum ) { this.phoneNum = phoneNum; }
+    public void setPhoneNum ( double phoneNum ) { this.phoneNum = phoneNum; }
 
     //name
     public String getName() {

@@ -22,6 +22,7 @@ import java.util.Map;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
+    //Changed phone type to Double in HashMap
     public Map<Double, Contact> usageMap = new HashMap<Double, Contact>();
     public ArrayList<Contact> topRanked = new ArrayList<Contact>();
 
