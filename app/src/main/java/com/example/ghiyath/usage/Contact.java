@@ -11,7 +11,7 @@ public class Contact{
     //change phoneNum to Double
     private String phoneNum;
     private int smsSent;
-    private int smsRecieved;
+    private int smsReceived;
 
     public Contact (String phoneNum) {
         this.phoneNum = phoneNum;
@@ -48,19 +48,19 @@ public class Contact{
         this.smsSent++;
     }
 
-    //smsRecieved
-    public int getSmsRecieved() {
-        return smsRecieved;
+    //smsReceived
+    public int getSmsReceived() {
+        return smsReceived;
     }
-    public void setSmsRecieved(int smsRecieved){
+    public void setSmsReceived(int smsReceived){
         this.smsSent = smsSent;
     }
-    public void incrementsmsRecieved() {
-        this.smsRecieved++;
+    public void incrementsmsReceived() {
+        this.smsReceived++;
     }
 
     //Compare
-    public boolean compareSMS(Contact c) { return this.smsRecieved+this.smsSent > c.smsRecieved+c.smsSent; }
+    public boolean compareSMS(Contact c) { return this.smsReceived+this.smsSent > c.smsReceived+c.smsSent; }
 
     //TODO: additional fields
     /*
@@ -72,6 +72,6 @@ public class Contact{
     //Override toString to display phoneNum
     @Override
     public String toString() {
-        return String.valueOf(getPhoneNum()) + String.valueOf(getSmsRecieved());
+        return String.valueOf(getPhoneNum()) + "                     " + String.valueOf(getSmsReceived());
     }
 }

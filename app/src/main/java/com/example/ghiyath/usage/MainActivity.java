@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     //Changed phone type to Double in HashMap
-    public Map<Double, Contact> usageMap = new HashMap<Double, Contact>();
+    public Map<String, Contact> usageMap = new HashMap<String, Contact>();
     public ArrayList<Contact> topRanked = new ArrayList<Contact>();
 
     @Override
@@ -51,17 +51,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
             //populate HashMap usageMap with <double phone(phone nuber), Contact(phone)>
             while(c.moveToNext()) {
 
-                double phone = Double.parseDouble(c.getString(c.getColumnIndex("address")));
+                String phone = c.getString(c.getColumnIndex("address"));
                 if(!usageMap.containsKey(phone))
                     usageMap.put(phone, new Contact(String.valueOf(phone)));
 
                 Contact updatedContact = usageMap.get(phone);
-                updatedContact.incrementsmsRecieved();
+                updatedContact.incrementsmsReceived();
                 usageMap.put(phone, updatedContact);
             }
+            //TEST
+            Contact testCon = new Contact("14083870968");
+            testCon.incrementsmsReceived();
+            testCon.incrementsmsReceived();
+            usageMap.put("14083870968", testCon);
+
+            Contact testCon2 = new Contact("14083870867");
+            testCon2.incrementsmsReceived();
+            testCon2.incrementsmsReceived();
+            testCon2.incrementsmsReceived();
+            usageMap.put("14083870867", testCon2);
 
             //sort and populate ArrayList topRanked with Contact objects
-            for(double phoneNum : usageMap.keySet()) {
+            for(String phoneNum : usageMap.keySet()) {
                 int i = 0;
                 for(; i < topRanked.size() && !usageMap.get(phoneNum).compareSMS(topRanked.get(i)); i++) {
                 }
@@ -69,9 +80,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
 
             //ArrayAdapter to populate listView with entries from topRanked ArrayList
-            ArrayAdapter<Contact> test = new ArrayAdapter<Contact>(this,android.R.layout.simple_list_item_1, topRanked);
+            ArrayAdapter<Contact> ranked = new ArrayAdapter<Contact>(this,android.R.layout.simple_list_item_1, topRanked);
             ListView lv = (ListView) findViewById(R.id.lvMsg);
-            lv.setAdapter(test);
+            lv.setAdapter(ranked);
 
 
 
