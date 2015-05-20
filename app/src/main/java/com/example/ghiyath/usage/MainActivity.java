@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,7 +53,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 double phone = Double.parseDouble(c.getString(c.getColumnIndex("address")));
                 if(!usageMap.containsKey(phone))
-                    usageMap.put(phone, new Contact(phone));
+                    usageMap.put(phone, new Contact(String.valueOf(phone)));
 
                 Contact updatedContact = usageMap.get(phone);
                 updatedContact.incrementsmsRecieved();
@@ -66,15 +68,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 topRanked.add(i, usageMap.get(phoneNum));
             }
 
-            //TODO: send topRanked to new activity for display
-            /*
-            Intent intent = new Intent(MainActivity.this, TextRankActivity.class);
-            Bundle args = new Bundle();
-            args.putSerializable("topRanked", (Serializable) topRanked);
-            intent.putExtra("Bundle", args);
-            //Start TextRankActivity
-            startActivity(intent);
-            */
+            //ArrayAdapter to populate listView with entries from topRanked ArrayList
+            ArrayAdapter<Contact> test = new ArrayAdapter<Contact>(this,android.R.layout.simple_list_item_1, topRanked);
+            ListView lv = (ListView) findViewById(R.id.lvMsg);
+            lv.setAdapter(test);
 
 
 

@@ -9,26 +9,28 @@ public class Contact{
     private String contactID;
     private String name;
     //change phoneNum to Double
-    private double phoneNum;
+    private String phoneNum;
     private int smsSent;
     private int smsRecieved;
 
-    public Contact (double phoneNum) {
+    public Contact (String phoneNum) {
         this.phoneNum = phoneNum;
     }
     //TODO: add name
-    public Contact(String contactID/*, String name*/) {
+    /*
+    public Contact(String contactID/) {
         this.contactID = contactID;
         //this.name = name;
     }
+    */
 
     //contactID
     public String getContactID() { return contactID; }
 
     //phoneNum
     //change phoneNum to Double
-    public double getPhoneNum () { return phoneNum; }
-    public void setPhoneNum ( double phoneNum ) { this.phoneNum = phoneNum; }
+    public String getPhoneNum () { return phoneNum; }
+    public void setPhoneNum ( String phoneNum ) { this.phoneNum = phoneNum; }
 
     //name
     public String getName() {
@@ -67,5 +69,9 @@ public class Contact{
     private int callsReceived;
 
      */
-
+    //Override toString to display phoneNum
+    @Override
+    public String toString() {
+        return String.valueOf(getPhoneNum()) + String.valueOf(getSmsRecieved());
+    }
 }
