@@ -1,16 +1,8 @@
 package com.example.ghiyath.usage;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Parcel;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,23 +17,45 @@ import java.util.Map;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     //Changed phone type to Double in HashMap
-    public Map<String, Contact> usageMap = new HashMap<String, Contact>();
-    public ArrayList<Contact> topRanked = new ArrayList<Contact>();
+    private Map<String, Contact> usageMap = new HashMap<String, Contact>();
+    private ArrayList<Contact> topRanked = new ArrayList<Contact>();
+    private ListView lv;
+    private ArrayAdapter<Contact> ranked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button start = (Button) findViewById(R.id.start);
-        MessagesHandler m = new MessagesHandler(usageMap, topRanked, this);
+
+        final int amtRanked = 1;
+
+        Button refresh = (Button) findViewById(R.id.refresh);
+        final MessagesHandler m = new MessagesHandler(this);
+        m.refresh();
 
         usageMap = m.getUsage();
-        topRanked = m.getTopRanked(1);
+        topRanked = m.getTopRanked(amtRanked);
 
-        ArrayAdapter<Contact> ranked = new ArrayAdapter<Contact>(this, android.R.layout.simple_list_item_1, topRanked);
-        ListView lv = (ListView) findViewById(R.id.lvMsg);
+        ranked = new ArrayAdapter<Contact>(this, android.R.layout.simple_list_item_1, topRanked);
+        lv = (ListView) findViewById(R.id.lvMsg);
         lv.setAdapter(ranked);
-        start.setOnClickListener(this);
+
+        final Context c = this;
+        refresh.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        m.refresh();
+
+                        usageMap = m.getUsage();
+                        topRanked = m.getTopRanked(amtRanked);
+
+                        ranked = new ArrayAdapter<Contact>(c, android.R.layout.simple_list_item_1, topRanked);
+                        ListView lv = (ListView) findViewById(R.id.lvMsg);
+                        lv.setAdapter(ranked);
+                    }
+                }
+        );
     }
 
     @Override

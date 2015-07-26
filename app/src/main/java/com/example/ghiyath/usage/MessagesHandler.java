@@ -21,40 +21,47 @@ import java.util.Map;
 public class MessagesHandler {
     private Map<String, Contact> usageMap;
     private ArrayList<Contact> topRanked;
+    private Cursor cursor;
+    private Context context;
 
-    public MessagesHandler( Map<String, Contact> usageMap, ArrayList<Contact> topRanked, Context context) {
-        this.usageMap = usageMap;
-        this.topRanked = topRanked;
+    public MessagesHandler( Context context) {
 
-        Uri inboxUri = Uri.parse("content://sms/inbox");
-        String[] columns = new String[] { "_id", "address", "body" };
+        //set globals
+        this.context = context;
+
+        //set cursor
+        this.cursor = buildCursor("content://sms/inbox", new String[] {"_id", "address", "body" });
+
+        refresh();
+        //c = buildCursor("content://sms/outbox");
+    }
+
+    private Cursor buildCursor(String uri, String[] properties){
+        Uri uriMade = Uri.parse(uri);
         ContentResolver cr = context.getApplicationContext().getContentResolver();
-        Cursor c = cr.query(inboxUri, columns, null, null, null);
+        return cr.query(uriMade, properties, null, null, null);
+    }
+
+    public void gatherMessages() {
+        usageMap = new HashMap<String, Contact>();
+        cursor = buildCursor("content://sms/inbox", new String[] {"_id", "address", "body" });
+
         //populate HashMap usageMap with <double phone(phone nuber), Contact(phone)>
-        while(c.moveToNext()) {
-            String phone = c.getString(c.getColumnIndex("address"));
-            Log.v("poop", phone);
-            if(!usageMap.containsKey(phone))
+        while (cursor.moveToNext()) {
+            String phone = this.cursor.getString(this.cursor.getColumnIndex("address"));
+
+            if (!usageMap.containsKey(phone))
                 usageMap.put(phone, new Contact(String.valueOf(phone)));
 
             Contact updatedContact = usageMap.get(phone);
             updatedContact.incrementsmsReceived();
             usageMap.put(phone, updatedContact);
         }
-        //TEST
+    }
 
-        Contact testCon = new Contact("14083870968");
-        testCon.incrementsmsReceived();
-        testCon.incrementsmsReceived();
-        usageMap.put("14083870968", testCon);
+    public void rankMessages( ) {
+        topRanked = new ArrayList<Contact>();
 
-        Contact testCon2 = new Contact("14083870867");
-        testCon2.incrementsmsReceived();
-        testCon2.incrementsmsReceived();
-        testCon2.incrementsmsReceived();
-        usageMap.put("14083870867", testCon2);
-
-        //sort and populate ArrayList topRanked with Contact objects
         for(String phoneNum : usageMap.keySet()) {
             int i = 0;
             for(; i < topRanked.size() && !usageMap.get(phoneNum).compareSMS(topRanked.get(i)); i++) {
@@ -62,8 +69,21 @@ public class MessagesHandler {
             topRanked.add(i, usageMap.get(phoneNum));
         }
 
-
     }
+
+
+        //TEST
+        /*
+
+        */
+        //sort and populate ArrayList topRanked with Contact objects
+
+    public void refresh () {
+        gatherMessages();
+        rankMessages();
+    }
+
+
 
     public Map<String, Contact> getUsage() {
         return usageMap;
